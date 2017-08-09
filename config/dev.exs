@@ -49,8 +49,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :alegro, Alegro.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "alegro",
+  password: "alegro",
   database: "alegro_dev",
-  hostname: "localhost",
+  hostname: "192.168.148.1",
   pool_size: 10
