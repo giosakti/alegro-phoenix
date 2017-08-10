@@ -16,7 +16,7 @@ defmodule Alegro.Router do
   scope "/", Alegro do
     pipe_through :browser # Use the default browser stack
 
-    get "/hello", HelloController, :world
+    get "/hello/:name", HelloController, :world
     get "/", PageController, :index
   end
 
