@@ -4,10 +4,10 @@ defmodule Alegro.Repo do
   """
   def all(Alegro.User) do
     [
-      %Alegro.User{id: "1", name: "Giovanni", username: "giosakti", password: "test1234"},
-      %Alegro.User{id: "2", name: "Iqbal", username: "qbl", password: "test1234"},
-      %Alegro.User{id: "3", name: "Raymond", username: "ralibi", password: "test1234"},
-      %Alegro.User{id: "4", name: "Tara", username: "tbaskara", password: "test1234"},
+      %Alegro.User{id: "1", name: "Giovanni Sakti", username: "giosakti", password: "test1234"},
+      %Alegro.User{id: "2", name: "Iqbal Farabi", username: "qbl", password: "test1234"},
+      %Alegro.User{id: "3", name: "Raymond Ralibi", username: "ralibi", password: "test1234"},
+      %Alegro.User{id: "4", name: "Tara Baskara", username: "tbaskara", password: "test1234"},
     ]
   end
 

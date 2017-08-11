@@ -17,6 +17,8 @@ defmodule Alegro.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/hello/:name", HelloController, :world
+    get "/users",       UserController, :index
+    get "/users/:id",   UserController, :show
     get "/", PageController, :index
   end
 
