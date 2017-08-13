@@ -17,7 +17,7 @@ defmodule Alegro.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    changeset = Alegro.User.changeset(%Alegro.User{}, user_params)
+    changeset = Alegro.User.registration_changeset(%Alegro.User{}, user_params)
 
     case Repo.insert(changeset) do
       {:ok, user} ->
