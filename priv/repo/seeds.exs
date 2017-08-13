@@ -9,3 +9,10 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will halt execution if something goes wrong.
+
+alias Alegro.Repo
+alias Alegro.Category
+
+for category <- ~w(Action Drama Romance Comedy Sci-fi) do
+  Repo.insert!(%Category{name: category})
+end
