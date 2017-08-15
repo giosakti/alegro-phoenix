@@ -26,6 +26,7 @@ defmodule Alegro.ConnCase do
       import Ecto.Query
 
       import Alegro.Router.Helpers
+      import Alegro.ConnCaseHelpers
       import Alegro.TestHelpers
 
       # The default endpoint for testing
