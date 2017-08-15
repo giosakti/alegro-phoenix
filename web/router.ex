@@ -31,7 +31,9 @@ defmodule Alegro.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", Alegro do
-  #   pipe_through :api
-  # end
+  scope "/api", Alegro.Api, as: :api do
+    pipe_through :api
+
+    resources "/videos", VideoController
+  end
 end
