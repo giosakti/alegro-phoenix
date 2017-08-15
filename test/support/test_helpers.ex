@@ -12,7 +12,14 @@ defmodule Alegro.TestHelpers do
     |> Repo.insert!()
   end
 
-  def insert_video(user, attrs \\ %{}) do
+  def insert_video(attrs \\ %{}) do
+    changes = Dict.merge(%{}, attrs)
+    %Alegro.Video{}
+    |> Alegro.Video.changeset(changes)
+    |> Repo.insert!()
+  end
+
+  def insert_video_as_user(user, attrs \\ %{}) do
     user
     |> Ecto.build_assoc(:videos, attrs)
     |> Repo.insert!()
