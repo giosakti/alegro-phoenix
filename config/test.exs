@@ -17,3 +17,6 @@ config :alegro, Alegro.Repo,
   database: "alegro_test",
   hostname: "192.168.148.1",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :comeonin, :bcrypt_log_rounds, 4
+config :comeonin, :pbkdf2_rounds, 1
