@@ -32,6 +32,28 @@ defmodule Alegro.VideoControllerTest do
   end
 
   @tag login_as: "max"
+  test "authorizes actions against access by other users",
+    %{user: owner, conn: conn} do
+
+    video = insert_video(owner, @valid_attrs)
+    non_owner = insert_user(username: "sneaky")
+    conn = assign(conn, :current_user, non_owner)
+
+    assert_error_sent :not_found, fn ->
+      get(conn, video_path(conn, :show, video))
+    end
+    assert_error_sent :not_found, fn ->
+      get(conn, video_path(conn, :edit, video))
+    end
+    assert_error_sent :not_found, fn ->
+      put(conn, video_path(conn, :update, video, video: @valid_attrs))
+    end
+    assert_error_sent :not_found, fn ->
+      delete(conn, video_path(conn, :delete, video))
+    end
+  end
+
+  @tag login_as: "max"
   test "lists all user's videos on index", %{conn: conn, user: user} do
     user_video = insert_video(user, title: "funny cats")
     other_video = insert_video(insert_user(username: "other"), title: "another video")
