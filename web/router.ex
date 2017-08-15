@@ -24,7 +24,7 @@ defmodule Alegro.Router do
     resources "/sessions", SessionController, only: [:new, :create, :delete]
   end
 
-  scope "/manage", Alegro do
+  scope "/manage", as: :manage do
     pipe_through [:browser, :authenticate_user]
 
     resources "/videos", VideoController
