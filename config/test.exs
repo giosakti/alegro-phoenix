@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :alegro, Alegro.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "alegro",
+  password: "alegro",
   database: "alegro_test",
-  hostname: "localhost",
+  hostname: "192.168.148.1",
   pool: Ecto.Adapters.SQL.Sandbox
