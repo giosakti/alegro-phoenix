@@ -20,7 +20,7 @@ defmodule Alegro.Mixfile do
   def application do
     [
       mod: {Alegro, []},
-      extra_applications: [:logger, :comeonin]
+      extra_applications: [:logger]
     ]
   end
 
