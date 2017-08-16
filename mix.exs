@@ -42,6 +42,7 @@ defmodule Alegro.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:comeonin, "~> 2.0"},
+      {:ex_machina, "~> 2.0"},
     ]
   end
 

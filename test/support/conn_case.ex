@@ -27,7 +27,7 @@ defmodule Alegro.ConnCase do
 
       import Alegro.Router.Helpers
       import Alegro.ConnCaseHelpers
-      import Alegro.TestHelpers
+      import Alegro.Factory
 
       # The default endpoint for testing
       @endpoint Alegro.Endpoint

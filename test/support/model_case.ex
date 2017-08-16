@@ -21,7 +21,7 @@ defmodule Alegro.ModelCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Alegro.TestHelpers
+      import Alegro.Factory
       import Alegro.ModelCase
     end
   end
