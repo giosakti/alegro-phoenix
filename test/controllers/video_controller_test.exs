@@ -8,7 +8,7 @@ defmodule Alegro.VideoControllerTest do
 
   setup %{conn: conn} = config do
     if username = config[:login_as] do
-      user = insert_user(username: username)
+      user = insert(:user, username: username)
       conn = assign(build_conn(), :current_user, user)
       {:ok, conn: conn, user: user}
     else
@@ -35,8 +35,8 @@ defmodule Alegro.VideoControllerTest do
   test "authorizes actions against access by other users",
     %{user: owner, conn: conn} do
 
-    video = insert_video_as_user(owner, @valid_attrs)
-    non_owner = insert_user(username: "sneaky")
+    video = insert(:video, user: owner)
+    non_owner = insert(:user, username: "sneaky")
     conn = assign(conn, :current_user, non_owner)
 
     assert_error_sent :not_found, fn ->
@@ -55,8 +55,8 @@ defmodule Alegro.VideoControllerTest do
 
   @tag login_as: "max"
   test "lists all user's videos on index", %{conn: conn, user: user} do
-    user_video = insert_video_as_user(user, title: "funny cats")
-    other_video = insert_video_as_user(insert_user(username: "other"), title: "another video")
+    user_video = insert(:video, title: "funny cats", user: user)
+    other_video = insert(:video, title: "another video", user: insert(:user, username: "other"))
 
     conn = get conn, video_path(conn, :index)
     assert html_response(conn, 200) =~ ~r/Listing videos/

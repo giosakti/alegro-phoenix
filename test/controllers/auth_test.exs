@@ -12,7 +12,7 @@ defmodule Alegro.AuthTest do
   end
 
   test "call places user from session into assigns", %{conn: conn} do
-    user = insert_user()
+    user = insert(:user)
     conn =
       conn
       |> put_session(:user_id, user.id)
@@ -65,7 +65,7 @@ defmodule Alegro.AuthTest do
   end
 
   test "login with a valid username and pass", %{conn: conn} do
-    user = insert_user(username: "me", password: "secret")
+    user = build(:user, username: "me") |> set_password("secret") |> insert
     {:ok, conn} =
       Auth.login_by_username_and_pass(conn, "me", "secret", repo: Repo)
 
@@ -78,7 +78,7 @@ defmodule Alegro.AuthTest do
   end
 
   test "login with password mismatch", %{conn: conn} do
-    _ = insert_user(username: "me", password: "secret")
+    _ = build(:user, username: "me") |> set_password("secret") |> insert
     assert {:error, :unauthorized, _conn} =
       Auth.login_by_username_and_pass(conn, "me", "wrong", repo: Repo)
   end
