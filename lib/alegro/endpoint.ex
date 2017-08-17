@@ -38,5 +38,7 @@ defmodule Alegro.Endpoint do
     key: "_alegro_key",
     signing_salt: "Tfkq0AmK"
 
+  plug CORSPlug
+
   plug Alegro.Router
 end
