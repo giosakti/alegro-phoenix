@@ -1,9 +1,10 @@
 defmodule Alegro.Api.VideoViewTest do
   use Alegro.ConnCase, async: true
+  import Phoenix.View
 
-  test "video_json" do
+  test "video.json" do
     video = %Alegro.Video{id: "1", title: "dogs"}
-    content = Alegro.Api.VideoView.video_json(video)
+    content = Alegro.Api.VideoView.render("video.json", %{video: video})
     assert content == %{
       id: video.id,
       title: video.title,
@@ -16,20 +17,22 @@ defmodule Alegro.Api.VideoViewTest do
     videos =
       [%Alegro.Video{id: "1", title: "dogs"},
        %Alegro.Video{id: "2", title: "cats"}]
-      |> Enum.map(&Alegro.Api.VideoView.video_json/1)
+      |> render_many(Alegro.Api.VideoView, "video.json")
     content = Alegro.Api.VideoView.render("index.json", %{videos: videos})
     assert content == %{
-      videos: videos
+      data: %{
+        items: videos
+      }
     }
   end
 
   test "show.json" do
     video =
       %Alegro.Video{id: "1", title: "dogs"}
-      |> Alegro.Api.VideoView.video_json
+      |> render_one(Alegro.Api.VideoView, "video.json")
     content = Alegro.Api.VideoView.render("show.json", %{video: video})
     assert content == %{
-      video: video
+      data: video
     }
   end
 end
