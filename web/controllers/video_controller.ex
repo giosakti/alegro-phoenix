@@ -27,7 +27,7 @@ defmodule Alegro.VideoController do
       |> Video.changeset(video_params)
 
     case Repo.insert(changeset) do
-      {:ok, video} ->
+      {:ok, _video} ->
         conn
         |> put_flash(:info, "Video created successfully.")
         |> redirect(to: video_path(conn, :index))
@@ -52,7 +52,7 @@ defmodule Alegro.VideoController do
     changeset = Video.changeset(video, video_params)
 
     case Repo.update(changeset) do
-      {:ok, video} ->
+      {:ok, _video} ->
         conn
         |> put_flash(:info, "Video updated successfully.")
         |> redirect(to: video_path(conn, :index))

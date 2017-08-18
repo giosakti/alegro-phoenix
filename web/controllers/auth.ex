@@ -8,7 +8,7 @@ defmodule Alegro.Auth do
     Keyword.fetch!(opts, :repo)
   end
 
-  def call(conn, repo) do
+  def call(conn, _repo) do
     user = Guardian.Plug.current_resource(conn)
 
     cond do
@@ -42,7 +42,7 @@ defmodule Alegro.Auth do
     Guardian.Plug.sign_out(conn)
   end
 
-  def unauthenticated(conn, params) do
+  def unauthenticated(conn, _params) do
     conn
     |> put_flash(:error, "You must be logged in to access that page")
     |> redirect(to: Helpers.page_path(conn, :index))
