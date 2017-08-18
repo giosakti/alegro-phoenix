@@ -15,7 +15,7 @@ defmodule Alegro.Router do
     plug Alegro.Auth, repo: Alegro.Repo
   end
 
-  pipeline :ensure_authenticated do
+  pipeline :browser_ensure_auth do
     plug Guardian.Plug.EnsureAuthenticated, handler: Alegro.Auth
   end
 
@@ -31,15 +31,14 @@ defmodule Alegro.Router do
     resources "/users", UserController, only: [:index, :show, :new, :create]
     resources "/videos", VideoController
     resources "/sessions", SessionController, only: [:new, :create, :delete]
+
+    scope "/manage", as: :manage do
+      pipe_through [:browser_ensure_auth]
+
+      resources "/videos", VideoController
+    end
   end
 
-  scope "/manage", as: :manage do
-    pipe_through [:browser, :browser_auth, :ensure_authenticated]
-
-    resources "/videos", VideoController
-  end
-
-  # Other scopes may use custom stacks.
   scope "/api", Alegro.Api, as: :api do
     pipe_through :api
 
