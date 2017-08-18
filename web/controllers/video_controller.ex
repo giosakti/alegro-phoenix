@@ -4,7 +4,7 @@ defmodule Alegro.VideoController do
   alias Alegro.Category
   alias Alegro.Video
 
-  plug :authenticate_user
+  plug Guardian.Plug.EnsureAuthenticated, handler: Alegro.Auth
   plug :load_categories when action in [:new, :create, :edit, :update]
 
   def index(conn, _params, user) do

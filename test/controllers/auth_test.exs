@@ -11,57 +11,48 @@ defmodule Alegro.AuthTest do
     {:ok, %{conn: conn}}
   end
 
-  test "call places user from session into assigns", %{conn: conn} do
+  test "call places user from guardian current_resource into assigns", %{conn: conn} do
     user = insert(:user)
     conn =
       conn
-      |> put_session(:user_id, user.id)
+      |> Guardian.Plug.sign_in(user)
       |> Auth.call(Repo)
 
     assert conn.assigns.current_user.id == user.id
   end
 
-  test "call with no session sets current_user assign to nil", %{conn: conn} do
+  test "call with nil guardian current_resource sets current_user assign to nil", %{conn: conn} do
     conn = Auth.call(conn, Repo)
     assert conn.assigns.current_user == nil
   end
 
-  test "authenticate_user halts when no current_user exists",
+  test "unauthenticated halts",
     %{conn: conn} do
 
-    conn = Auth.authenticate_user(conn, [])
+    conn = Auth.unauthenticated(conn, [])
     assert conn.halted
   end
 
-  test "authenticate_user continues when the current_user exists",
-    %{conn: conn} do
-
-    conn =
-      conn
-      |> assign(:current_user, %Alegro.User{})
-      |> Auth.authenticate_user([])
-
-    refute conn.halted
-  end
-
-  test "login puts the user in the session", %{conn: conn} do
+  test "login sign in the user using Guardian", %{conn: conn} do
+    user = insert(:user)
     login_conn =
       conn
-      |> Auth.login(%Alegro.User{id: 123})
+      |> Auth.login(user)
       |> send_resp(:ok, "")
     next_conn = get(login_conn, "/")
-    assert get_session(next_conn, :user_id) == 123
+    assert Guardian.Plug.current_resource(next_conn).id == user.id
   end
 
-  test "logout drops the session", %{conn: conn} do
+  test "logout drops the session from Guardian", %{conn: conn} do
+    user = insert(:user)
     logout_conn =
       conn
-      |> put_session(:user_id, 123)
+      |> Auth.login(user)
       |> Auth.logout()
       |> send_resp(:ok, "")
 
     next_conn = get(logout_conn, "/")
-    refute get_session(next_conn, :user_id)
+    refute Guardian.Plug.current_resource(next_conn)
   end
 
   test "login with a valid username and pass", %{conn: conn} do
@@ -69,7 +60,7 @@ defmodule Alegro.AuthTest do
     {:ok, conn} =
       Auth.login_by_username_and_pass(conn, "me", "secret", repo: Repo)
 
-    assert conn.assigns.current_user.id == user.id
+    assert Guardian.Plug.current_resource(conn).id == user.id
   end
 
   test "login with a not found user", %{conn: conn} do

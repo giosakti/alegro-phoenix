@@ -7,7 +7,16 @@ defmodule Alegro.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+  end
+
+  pipeline :browser_auth do
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.LoadResource
     plug Alegro.Auth, repo: Alegro.Repo
+  end
+
+  pipeline :ensure_authenticated do
+    plug Guardian.Plug.EnsureAuthenticated, handler: Alegro.Auth
   end
 
   pipeline :api do
@@ -15,7 +24,7 @@ defmodule Alegro.Router do
   end
 
   scope "/", Alegro do
-    pipe_through :browser # Use the default browser stack
+    pipe_through [:browser, :browser_auth]
 
     get "/hello/:name", HelloController, :world
     get "/", PageController, :index
@@ -25,7 +34,7 @@ defmodule Alegro.Router do
   end
 
   scope "/manage", as: :manage do
-    pipe_through [:browser, :authenticate_user]
+    pipe_through [:browser, :browser_auth, :ensure_authenticated]
 
     resources "/videos", VideoController
   end

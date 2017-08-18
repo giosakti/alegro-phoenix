@@ -9,7 +9,8 @@ defmodule Alegro.VideoControllerTest do
   setup %{conn: conn} = config do
     if username = config[:login_as] do
       user = insert(:user, username: username)
-      conn = assign(build_conn(), :current_user, user)
+      conn = build_conn()
+        |> login_as(user)
       {:ok, conn: conn, user: user}
     else
       :ok
@@ -37,7 +38,7 @@ defmodule Alegro.VideoControllerTest do
 
     video = insert(:video, user: owner)
     non_owner = insert(:user, username: "sneaky")
-    conn = assign(conn, :current_user, non_owner)
+    conn = login_as(conn, non_owner)
 
     assert_error_sent :not_found, fn ->
       get(conn, video_path(conn, :show, video))
@@ -77,5 +78,14 @@ defmodule Alegro.VideoControllerTest do
     conn = post conn, video_path(conn, :create), video: @invalid_attrs
     assert html_response(conn, 200) =~ "check the errors"
     assert video_count(Alegro.Video) == count_before
+  end
+
+  defp login_as(conn, user) do
+    conn
+      |> bypass_through(Alegro.Router, [:browser])
+      |> get("/")
+      |> Alegro.Auth.login(user)
+      |> send_resp(200, "Flush the session")
+      |> recycle()
   end
 end

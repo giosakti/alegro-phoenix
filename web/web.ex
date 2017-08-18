@@ -37,7 +37,6 @@ defmodule Alegro.Web do
 
       import Alegro.Router.Helpers
       import Alegro.Gettext
-      import Alegro.Auth, only: [authenticate_user: 2]
     end
   end
 
@@ -60,8 +59,6 @@ defmodule Alegro.Web do
   def router do
     quote do
       use Phoenix.Router
-
-      import Alegro.Auth, only: [authenticate_user: 2]
     end
   end
 

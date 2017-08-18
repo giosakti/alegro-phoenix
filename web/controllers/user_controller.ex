@@ -1,6 +1,6 @@
 defmodule Alegro.UserController do
   use Alegro.Web, :controller
-  plug :authenticate_user when action in [:index, :show]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: Alegro.Auth] when action in [:index, :show]
 
   def index(conn, _params) do
     users = Repo.all(Alegro.User)
