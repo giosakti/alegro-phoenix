@@ -4,6 +4,8 @@ defmodule Alegro.Api.VideoController do
 
   action_fallback Alegro.Api.FallbackController
 
+  plug Guardian.Plug.EnsureAuthenticated, handler: Alegro.Api.Auth
+
   def index(conn, _params) do
     videos = Repo.all(Video)
     render conn, "index.json", videos: videos

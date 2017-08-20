@@ -23,6 +23,13 @@ defmodule Alegro.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :api_auth do
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.LoadResource
+    plug Alegro.Api.Auth, repo: Alegro.Repo
+  end
+
+  # Browser routes
   scope "/", Alegro do
     pipe_through [:browser, :browser_auth]
 
@@ -39,8 +46,9 @@ defmodule Alegro.Router do
     end
   end
 
+  # API routes
   scope "/api", Alegro.Api, as: :api do
-    pipe_through :api
+    pipe_through [:api, :api_auth]
 
     resources "/videos", VideoController
   end
